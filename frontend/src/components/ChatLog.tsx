@@ -1,12 +1,13 @@
 //import {useState} from "react";
 import '../css/ChatLog.css'
-import {ChatBubble} from "./ChatBubble.tsx";
+import ChatBubble from "./ChatBubble.tsx";
+import Message from "../App.tsx";
 
 /*
  * Produces the chat log denoting the responses from the AI and the user.
  */
-export default function ChatLog() {
 
+export default function ChatLog({conversation}) {
     return (
         <section className={"ChatLog_Container"}>
             <h2>Chat Log</h2>

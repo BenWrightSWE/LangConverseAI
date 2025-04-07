@@ -1,21 +1,20 @@
 import '../css/Speak.css';
 import {useState, useEffect, useRef} from "react";
 
-
-
 /*
- * Houses the buttons that record the users audio.
+ * Houses the buttons that record the users speech and send it to the AI.
  */
-export default function Speak(
-    {isRecording, setIsRecording, setTranscript, setFullTranscript, conversation, setConversation}
-) {
+export default function Speak({isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
+                                  setFullTranscript, conversation, setConversation, isNoisy}) {
 
     // The different state values used for getting the data for the Speech Recognition API and Whisper API
-    /*const [audioChunks, setAudioChunks] = useState([]);
+    const [audioChunks, setAudioChunks] = useState([]);
     const [blob, setBlob] = useState(new Blob(audioChunks, {type: 'audio/wav'}));
-    const mediaRecorderRef = useRef(null);*/
+    const mediaRecorderRef = useRef(null);
 
     const speechRecognitionRef = useRef(null);
+
+    const isNoisyRef = useRef(isNoisy);
 
     /* 
         Sets up the speech recognition.
@@ -26,7 +25,7 @@ export default function Speak(
         speechRecognitionRef.current = recognition;
         
         // Sets language and how its being recorded/
-        recognition.lang = "en-US"; //"es-mx";
+        recognition.lang = "en-US"; //"es-mx";en-US
         recognition.continuous = true;
         recognition.interimResults = true;
 
@@ -37,7 +36,10 @@ export default function Speak(
                 const result = event.results[i];
                 interimTranscript += result[0].transcript;
                 if(event.results[i].isFinal) {
-                    setFullTranscript(prevState => prevState + event.results[i][0].transcript + ". ")
+                    console.log("is noisy is " + isNoisyRef.current);
+                    if(isNoisyRef.current) { // will use the Speech Rec for fullTranscript if it's noisy.
+                        setFullTranscript(prevState => prevState + event.results[i][0].transcript + ". ");
+                    }
                 }
             }
             setTranscript(interimTranscript);
@@ -51,7 +53,7 @@ export default function Speak(
         // Restarts if the recording continues
         recognition.onend = () => {
             if(isRecording){
-                setFullTranscript(prevState => prevState + transcript);
+                setFullTranscript(prevState => prevState  + transcript);
                 recognition.start();
             } else {
                 recognition.stop();
@@ -60,85 +62,9 @@ export default function Speak(
         };
     }
 
-    // When send results button is clicked, this uses a POST to send the transcript to the back end Flask restAPI.
-    const sendResults = async () => {
-        try {
-            const response = await fetch('http://localhost:9000/api/llamaResponse', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: fullTranscript })
-            });
-            const result = await response.json();
-            console.log('Model Response:', result.modelResponse);
-            setConversation([...conversation, fullTranscript, result.modelResponse]);
-            setFullTranscript("");
-        } catch (error) {
-            console.error('Error uploading transcription:', error);
-        }
-    }
-
-    // Resets the transcipt if the user isn't satisfied with the transciption.
-    const resetTranscription = () => {
-        //setBlob(new Blob(audioChunks, {type: 'audio/wav'}));
-        setTranscript('');
-        setFullTranscript('');
-    };
-
-    useEffect(() => {
-        if(speechRecognitionRef.current){
-            if (isRecording) {
-                //startRecording();
-                speechRecognitionRef.current.start();
-                console.log("recognition started");
-            } else {
-                //stopRecording();
-                speechRecognitionRef.current.stop();
-                console.log("recognition ended");
-            }
-        } else {
-            setUpRecognition();
-        }
-    }, [isRecording]);
-
-    // Record changes to stop recording to send. Reset stays the same.
-    return (
-        <div className={"Speak_Container"}>
-            <button
-                onClick={() => setIsRecording(!isRecording)}
-                className={"Speak_Recorder"}
-            >
-                {isRecording ? '\u25A0' : 'REC'}
-            </button>
-            <div className={"Speak_OtherButtons_Container"}>
-                <button className={"Speak_OtherButtons"} onClick={sendResults}>Send</button>
-                <button className={"Speak_OtherButtons"} onClick={resetTranscription}>Reset</button>
-            </div>
-        </div>
-    );
-}
-
-
-/*
-<h2>Converse?</h2>
-            <div className={"speak-buttons"}>
-                <button onClick={() => setIsRecording(!isRecording)}>
-                    {isRecording ? 'Stop Recording' : 'Start Recording'}
-                </button>
-                <button onClick={sendResults}>Send</button>
-                <button onClick={resetTranscription}>Reset</button>
-            </div>
-            <h2>Concurrent Transcription</h2>
-            <p>{transcript}</p>
-            <h2>Full Transcription</h2>
-            <p>{fullTranscript}</p>
- */
-
-// Was going to use Whisper but it was messing up too much, might try again later.
-
-/*
+    /*
+        Sets up the audio file creation and recording for Whisper.
+     */
     // Starts the media recording and sets what happens when its recording and when it's not recording.
     async function startRecording() {
         const stream = await navigator.mediaDevices.getUserMedia({audio: true});
@@ -181,8 +107,16 @@ export default function Speak(
         }
     }
 
+    const sendResults = () => {
+        if (isNoisy) {
+            sendResultsNoisy();
+        } else {
+            sendResultsQuiet();
+        }
+    }
+
     // Sends results to a python backend for Whisper
-    const sendResults = async () => {
+    const sendResultsQuiet = async () => {
         const formData = new FormData();
         formData.append('file', blob, 'speech.wav');
 
@@ -202,4 +136,78 @@ export default function Speak(
         }
     };
 
-*/
+
+
+    // When send results button is clicked, this uses a POST to send the transcript to the back end Flask restAPI.
+    const sendResultsNoisy = async () => {
+        try {
+            const response = await fetch('http://localhost:9000/api/llamaResponse', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: fullTranscript })
+            });
+            const result = await response.json();
+            console.log('Model Response:', result.modelResponse);
+            setConversation([...conversation, fullTranscript, result.modelResponse]);
+            setFullTranscript("");
+        } catch (error) {
+            console.error('Error uploading transcription:', error);
+        }
+    }
+
+    // Resets the transcipt if the user isn't satisfied with the transciption.
+    const resetTranscription = () => {
+        if(!isNoisy) {
+            setBlob(new Blob(audioChunks, {type: 'audio/wav'}));
+        }
+        setTranscript('');
+        setFullTranscript('');
+    };
+
+    useEffect(() => {
+        if(speechRecognitionRef.current){
+            if (isRecording) {
+                //startRecording();
+                speechRecognitionRef.current.start();
+                console.log("recognition started");
+                if(!isNoisy) {
+                    startRecording();
+                }
+            } else {
+                //stopRecording();
+                speechRecognitionRef.current.stop();
+                console.log("recognition ended");
+                if(!isNoisy) {
+                    stopRecording();
+                }
+            }
+        } else {
+            setUpRecognition();
+        }
+    }, [isRecording]);
+
+    useEffect(() => {
+        resetTranscription();
+        isNoisyRef.current = isNoisy;
+        // perhaps set a resetTranscript if they click this and set the record button to REC
+    }, [isNoisy]);
+
+    // Record changes to stop recording to send. Reset stays the same.
+    return (
+        <div className={"Speak_Container"}>
+            <button
+                onClick={() => setIsRecording(!isRecording)}
+                className={"Speak_Recorder"}
+            >
+                {isRecording ? '\u25A0' : 'REC'}
+            </button>
+            <div className={"Speak_OtherButtons_Container"}>
+                <button className={"Speak_OtherButtons"} onClick={sendResults}>Send</button>
+                <button className={"Speak_OtherButtons"} onClick={resetTranscription}>Reset</button>
+            </div>
+        </div>
+    );
+}

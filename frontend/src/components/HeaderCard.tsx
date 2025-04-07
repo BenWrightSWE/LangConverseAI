@@ -1,7 +1,7 @@
 import '../css/HeaderCard.css'
 import logo from '../../public/LCAI-Panel.png'
 
-export function HeaderCard() {
+export default function HeaderCard() {
     return (
         <div className={"HeaderCard_HeaderContainer"}>
             <h1>Lang Converse AI</h1>

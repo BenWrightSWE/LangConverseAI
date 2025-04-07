@@ -1,6 +1,6 @@
 import '../css/TranscriptLog.css'
 
-export function TranscriptLog({transcript, fullTranscript}) {
+export default function TranscriptLog({transcript, fullTranscript}) {
     return (
         <div className={"TranscriptLog_Container"}>
             <div className={"TranscriptLog_InterimContainer"}>

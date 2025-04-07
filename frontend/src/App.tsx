@@ -1,33 +1,42 @@
-import { useState } from 'react'
 import './App.css'
-import {HeaderCard} from "./components/HeaderCard.tsx";
+import HeaderCard from "./components/HeaderCard.tsx";
 import Speak from "./components/Speak.tsx";
-import {Settings} from "./components/Settings.tsx";
-import {TranscriptLog} from "./components/TranscriptLog.tsx";
-import ChatLog from "./components/ChatLog.tsx";
+import Settings from "./components/Settings.tsx";
+import TranscriptLog from "./components/TranscriptLog.tsx";
+import ChatLog from "./components/ChatLog";
+import { useState } from 'react'
 
+export type Message = {
+    speaker: string;
+    text: string;
+};
+
+/*
+ * The main app that holds all the components within the body tag.
+ */
 function App() {
 
     const [isRecording, setIsRecording] = useState(false);
     const [transcript, setTranscript] = useState('');
     const [fullTranscript, setFullTranscript] = useState('');
-    const [conversation, setConversation] = useState([]);
+    const [conversation, setConversation] = useState<Message[]>([]);
+    const [isNoisy, setIsNoisy] = useState(true);
 
     return (
         <div className={"App_Total"}>
             <div className={"App_UpperPart"}>
-                <HeaderCard></HeaderCard>
+                <HeaderCard/>
                 <Speak isRecording={isRecording} setIsRecording={setIsRecording}
-                    setTranscript={setTranscript} setFullTranscript={setFullTranscript}
-                    conversation={conversation} setConversation={setConversation}/>
-                <Settings></Settings>
+                    transcript={transcript} setTranscript={setTranscript} fullTranscript={fullTranscript} setFullTranscript={setFullTranscript}
+                    conversation={conversation} setConversation={setConversation} isNoisy={isNoisy}/>
+                <Settings isNoisy={isNoisy} setIsNoisy={setIsNoisy}/>
             </div>
             <div className={"App_LowerPart"}>
                 <TranscriptLog transcript={transcript} fullTranscript={fullTranscript}/>
-                <ChatLog></ChatLog>
+                <ChatLog conversation={conversation}></ChatLog>
             </div>
         </div>
-    );
+    )
 }
 
 export default App

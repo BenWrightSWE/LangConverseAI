@@ -21,3 +21,10 @@ Could also add future part where it shows both the english and other languages
 transcription and conversation. So like have a dropdown for native language, then
 a button for the practice language. For now we will just be using english to get the
 answer back from the AI.
+
+Add a wait before the quiet recording, the audio blob needs time before recording i guess.
+
+To see git log with a good format:
+git log --all --decorate --oneline --graph
+
+
