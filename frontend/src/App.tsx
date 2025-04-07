@@ -1,29 +1,25 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import './components/Speak.tsx'
-import './components/ChatLog.tsx'
+import {HeaderCard} from "./components/HeaderCard.tsx";
 import Speak from "./components/Speak.tsx";
+import {Settings} from "./components/Settings.tsx";
+import {TranscriptLog} from "./components/TranscriptLog.tsx";
 import ChatLog from "./components/ChatLog.tsx";
 
 function App() {
 
   return (
-    <>
-        <div className={"upperPart"}>
-
+    <div className={"App_Total"}>
+        <div className={"App_UpperPart"}>
+            <HeaderCard></HeaderCard>
+            <Speak></Speak>
+            <Settings></Settings>
         </div>
-        <div className={"lowerPart"}>
-          <HeaderCard></HeaderCard>
-          <Speak></Speak>
-          <Settings></Settings>
-          <div>
+        <div className={"App_LowerPart"}>
             <TranscriptLog></TranscriptLog>
             <ChatLog></ChatLog>
-          </div>
         </div>
-    </>
+    </div>
   )
 }
 

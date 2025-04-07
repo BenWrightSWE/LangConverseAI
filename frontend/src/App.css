@@ -5,3 +5,24 @@
   text-align: center;
 }
 
+.App_Total {
+  display: grid;
+  grid-template: 1fr 2fr / 1fr;
+  gap: 3em;
+}
+
+.App_UpperPart {
+  display: grid;
+  grid-template: 1fr / 1fr 1fr 1fr;
+  height: 100%;
+  align-items: center;
+  gap: 5%;
+}
+
+.App_LowerPart {
+  display: grid;
+  grid-template: 1fr / 1fr 2fr;
+  height: 100%;
+  border: antiquewhite 2px solid;
+  border-radius: 10px;
+}

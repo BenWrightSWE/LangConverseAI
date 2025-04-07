@@ -1,0 +1,47 @@
+.Settings_Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: antiquewhite 2px solid;
+    border-radius: 10px;
+    padding: 1.5em 4em 3em 3em;
+    font-family: "Times New Roman";
+    font-size: 1.1em;
+    height: 80%;
+}
+
+.Settings_Toggle {
+    appearance: none;
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: #edc4ff;
+    border-radius: 12px;
+    transition: background-color 0.2s;
+}
+
+.Settings_Toggle:checked {
+    background-color: #604766;
+}
+
+.Settings_Toggle::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background-color: whitesmoke;
+    transition: transform 0.2s;
+}
+
+.Settings_Toggle:checked::before {
+    transform: translateX(20px);
+}
+
+.Settings_Label {
+    font-size: 1.4rem;
+    color: whitesmoke;
+}

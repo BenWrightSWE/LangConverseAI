@@ -1,3 +1,4 @@
+import '../css/Speak.css'
 import React, {useState, useEffect, useRef} from "react";
 
 /*
@@ -103,8 +104,24 @@ export default function Speak() {
 
     // Record changes to stop recording to send. Reset stays the same.
     return (
-        <div>
-            <h2>Converse?</h2>
+        <div className={"Speak_Container"}>
+            <button
+                onClick={() => setIsRecording(!isRecording)}
+                className={"Speak_Recorder"}
+            >
+                {isRecording ? '\u25A0' : 'REC'}
+            </button>
+            <div className={"Speak_OtherButtons_Container"}>
+                <button className={"Speak_OtherButtons"} onClick={sendResults}>Send</button>
+                <button className={"Speak_OtherButtons"} onClick={resetTranscription}>Reset</button>
+            </div>
+        </div>
+    );
+}
+
+
+/*
+<h2>Converse?</h2>
             <div className={"speak-buttons"}>
                 <button onClick={() => setIsRecording(!isRecording)}>
                     {isRecording ? 'Stop Recording' : 'Start Recording'}
@@ -116,10 +133,7 @@ export default function Speak() {
             <p>{transcript}</p>
             <h2>Full Transcription</h2>
             <p>{fullTranscript}</p>
-        </div>
-    );
-}
-
+ */
 
 // Was going to use Whisper but it was messing up too much, might try again later.
 

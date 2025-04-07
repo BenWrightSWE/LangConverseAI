@@ -1,0 +1,22 @@
+.TranscriptLog_Container {
+    display: grid;
+    grid-template: 1fr 2fr / 1fr;
+    height: 100%;
+}
+
+.TranscriptLog_InterimContainer {
+    height: 100%;
+    border-right: antiquewhite 2px solid;
+}
+
+.TranscriptLog_FullContainer {
+    height: 100%;
+    border-top: antiquewhite 2px solid;
+    border-right: antiquewhite 2px solid;
+}
+
+.TranscriptLog_Text {
+    height: 40%;
+    padding: 0em 2em;
+    overflow: auto;
+}

@@ -1,0 +1,43 @@
+.Speak_Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+/*
+add transition so red font and border appears when recording
+*/
+.Speak_Recorder {
+    border: none;
+    text-decoration: none;
+    background-color: antiquewhite;
+    text-align: center;
+    font-size: 5em;
+    color: #242424;
+    width: 60%;
+    padding: 17% 10% ;
+    border-radius: 100%;
+    font-family: "Times New Roman";
+}
+
+.Speak_OtherButtons_Container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.Speak_OtherButtons {
+    border: none;
+    text-decoration: none;
+    background-color: antiquewhite;
+    text-align: center;
+    font-size: 2em;
+    padding: .3em .8em;
+    border-radius: 5px;
+    font-family: "Times New Roman";
+    color: #242424;
+}

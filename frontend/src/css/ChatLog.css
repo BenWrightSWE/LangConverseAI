@@ -1,0 +1,12 @@
+.ChatLog_Container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.ChatLog_Log {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
