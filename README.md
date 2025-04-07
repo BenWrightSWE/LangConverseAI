@@ -16,3 +16,8 @@ Until a good dataset for conversational language can be used,
 the AI might be able to work better if you translate to english
 with Whisper, then get conversation from AI in english, then
 translate back with Whisper.
+
+Could also add future part where it shows both the english and other languages
+transcription and conversation. So like have a dropdown for native language, then
+a button for the practice language. For now we will just be using english to get the
+answer back from the AI.

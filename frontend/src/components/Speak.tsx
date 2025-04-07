@@ -1,20 +1,21 @@
-import '../css/Speak.css'
-import React, {useState, useEffect, useRef} from "react";
+import '../css/Speak.css';
+import {useState, useEffect, useRef} from "react";
+
+
 
 /*
  * Houses the buttons that record the users audio.
  */
-export default function Speak() {
+export default function Speak(
+    {isRecording, setIsRecording, setTranscript, setFullTranscript, conversation, setConversation}
+) {
 
     // The different state values used for getting the data for the Speech Recognition API and Whisper API
     /*const [audioChunks, setAudioChunks] = useState([]);
     const [blob, setBlob] = useState(new Blob(audioChunks, {type: 'audio/wav'}));
     const mediaRecorderRef = useRef(null);*/
-    const [isRecording, setIsRecording] = useState(false);
-    const [transcript, setTranscript] = useState('');
+
     const speechRecognitionRef = useRef(null);
-    const [fullTranscript, setFullTranscript] = useState('');
-    const [conversation, setConversation] = useState([]);
 
     /* 
         Sets up the speech recognition.
