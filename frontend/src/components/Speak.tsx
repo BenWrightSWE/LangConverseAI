@@ -7,14 +7,29 @@ import {useState, useEffect, useRef} from "react";
 export default function Speak({isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
                                   setFullTranscript, conversation, setConversation, isNoisy}) {
 
-    // The different state values used for getting the data for the Speech Recognition API and Whisper API
-    const [audioChunks, setAudioChunks] = useState([]);
-    const [blob, setBlob] = useState(new Blob(audioChunks, {type: 'audio/wav'}));
-    const mediaRecorderRef = useRef(null);
+    const isNoisyRef = useRef(isNoisy);
 
     const speechRecognitionRef = useRef(null);
 
-    const isNoisyRef = useRef(isNoisy);
+    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+    let audioChunksRef: Blob[] = useRef<Blob[]>([]);
+    let blob: Blob = new Blob(audioChunksRef.current, {type: 'audio/wav'});
+
+    async function setMediaRecorder() {
+        var stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        var mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunksRef.current.push(event.data);
+            console.log("Chunk pushed:", event.data);
+        };
+
+        mediaRecorderRef.current = mediaRecorder;
+    }
+
+    useEffect(() => {
+        setMediaRecorder();
+    }, []);
 
     /* 
         Sets up the speech recognition.
@@ -36,7 +51,6 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
                 const result = event.results[i];
                 interimTranscript += result[0].transcript;
                 if(event.results[i].isFinal) {
-                    console.log("is noisy is " + isNoisyRef.current);
                     if(isNoisyRef.current) { // will use the Speech Rec for fullTranscript if it's noisy.
                         setFullTranscript(prevState => prevState + event.results[i][0].transcript + ". ");
                     }
@@ -65,45 +79,30 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
     /*
         Sets up the audio file creation and recording for Whisper.
      */
+
     // Starts the media recording and sets what happens when its recording and when it's not recording.
-    async function startRecording() {
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-        const mediaRecorder = new MediaRecorder(stream);
-
-        //console.log("Media recorder created")
-
-        mediaRecorderRef.current = mediaRecorder;
-
-        mediaRecorder.ondataavailable = (event) => {
-            setAudioChunks([...audioChunks, event.data]);
-            //console.log("Audio chunks length: " + audioChunks.length);
-        };
-
-        mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, {type: 'audio/wav'});
-            //console.log("Blob created.")
-            await setBlob(audioBlob);
-        };
-
-        mediaRecorder.start();
-        console.log("recording");
-        //console.log("Recorder State:", mediaRecorder?.state);
+    function startRecording() {
+        audioChunksRef.current = [];
+        if(mediaRecorderRef.current){
+            mediaRecorderRef.current.start(1000);
+            console.log("recording started");
+        } else {
+            console.log("mediaRecorder is not initialized.")
+        }
     }
 
     // Stops the recording of the media recording
     function stopRecording() {
-        //console.log("stop recording called");
-        // console.log("Recorder State:", mediaRecorderRef.current?.state);
+        const currBlob = new Blob(audioChunksRef.current, {type: 'audio/wav'});
+        console.log("audio chunks: " + audioChunksRef.current.length);
+        console.log(currBlob.size);
+        const audioURL = URL.createObjectURL(currBlob);
+        const audio = new Audio(audioURL);
+        audio.play();
+
         if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
             console.log("recording stopped");
             mediaRecorderRef.current.stop();
-        }
-
-
-        if (blob.size == 0) {
-            console.log("blob is empty");
-        } else {
-            console.log("blob is NOT empty");
         }
     }
 
@@ -161,7 +160,9 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
     // Resets the transcipt if the user isn't satisfied with the transciption.
     const resetTranscription = () => {
         if(!isNoisy) {
-            setBlob(new Blob(audioChunks, {type: 'audio/wav'}));
+            audioChunksRef.current = [];
+            blob = new Blob(audioChunksRef.current, {type: 'audio/wav'});
+            //setBlob(new Blob(audioChunks, {type: 'audio/wav'}));
         }
         setTranscript('');
         setFullTranscript('');
