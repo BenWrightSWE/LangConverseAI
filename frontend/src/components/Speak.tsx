@@ -29,6 +29,7 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
 
     useEffect(() => {
         setMediaRecorder();
+        setUpRecognition();
     }, []);
 
     /* 
@@ -96,26 +97,21 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
         const currBlob = new Blob(audioChunksRef.current, {type: 'audio/wav'});
         console.log("audio chunks: " + audioChunksRef.current.length);
         console.log(currBlob.size);
-        const audioURL = URL.createObjectURL(currBlob);
+        // If you need to test the playback uncommend below
+        /*const audioURL = URL.createObjectURL(currBlob);
         const audio = new Audio(audioURL);
-        audio.play();
+        audio.play();*/
 
         if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
             console.log("recording stopped");
             mediaRecorderRef.current.stop();
         }
-    }
 
-    const sendResults = () => {
-        if (isNoisy) {
-            sendResultsNoisy();
-        } else {
-            sendResultsQuiet();
-        }
+        audioTranscribe();
     }
 
     // Sends results to a python backend for Whisper
-    const sendResultsQuiet = async () => {
+    const audioTranscribe = async () => {
         const formData = new FormData();
         formData.append('file', blob, 'speech.wav');
 
@@ -129,7 +125,7 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
             });
             const result = await response.json();
             console.log('Transcription', result.transcription);
-            //setTranscript(result.transcription)
+            await setFullTranscript(result.transcription);
         } catch (error) {
             console.error('Error uploading audio:', error);
         }
@@ -138,7 +134,7 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
 
 
     // When send results button is clicked, this uses a POST to send the transcript to the back end Flask restAPI.
-    const sendResultsNoisy = async () => {
+    const sendResultsToAI= async () => {
         try {
             const response = await fetch('http://localhost:9000/api/llamaResponse', {
                 method: 'POST',
@@ -185,8 +181,6 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
                     stopRecording();
                 }
             }
-        } else {
-            setUpRecognition();
         }
     }, [isRecording]);
 
@@ -206,7 +200,7 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
                 {isRecording ? '\u25A0' : 'REC'}
             </button>
             <div className={"Speak_OtherButtons_Container"}>
-                <button className={"Speak_OtherButtons"} onClick={sendResults}>Send</button>
+                <button className={"Speak_OtherButtons"} onClick={sendResultsToAI}>Send</button>
                 <button className={"Speak_OtherButtons"} onClick={resetTranscription}>Reset</button>
             </div>
         </div>

@@ -1,3 +1,5 @@
+# unused code that im keeping for the time being just in case
+# this was used before I switched to the modular approach
 import llama_cpp as llama
 from flask import Flask, request, jsonify
 from flask_cors import CORS
