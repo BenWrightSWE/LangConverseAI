@@ -2,6 +2,7 @@
 # Project
 /.DS_Store
 /.idea/
+/temp_audio.wav
 
 # Backend
 /backend/models/llama-2-7b-chat.Q4_K_M.gguf

@@ -6,7 +6,8 @@ import TranscriptLog from "./components/TranscriptLog.tsx";
 import ChatLog from "./components/ChatLog";
 import { useState } from 'react'
 
-export type Message = {
+export interface Message {
+    id: number;
     speaker: string;
     text: string;
 };
@@ -33,7 +34,7 @@ function App() {
             </div>
             <div className={"App_LowerPart"}>
                 <TranscriptLog transcript={transcript} fullTranscript={fullTranscript}/>
-                <ChatLog conversation={conversation}></ChatLog>
+                <ChatLog conversation={conversation} setConversation={conversation}></ChatLog>
             </div>
         </div>
     )

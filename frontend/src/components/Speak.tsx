@@ -4,15 +4,15 @@ import {useState, useEffect, useRef} from "react";
 /*
  * Houses the buttons that record the users speech and send it to the AI.
  */
-export default function Speak({isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
-                                  setFullTranscript, conversation, setConversation, isNoisy}) {
+export default function Speak({ isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
+                                  setFullTranscript, conversation, setConversation, isNoisy }) {
 
     const isNoisyRef = useRef(isNoisy);
 
     const speechRecognitionRef = useRef(null);
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    let audioChunksRef: Blob[] = useRef<Blob[]>([]);
+    let audioChunksRef = useRef<Blob[]>([]);
     let blob: Blob = new Blob(audioChunksRef.current, {type: 'audio/wav'});
 
     async function setMediaRecorder() {
@@ -134,7 +134,8 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
 
 
     // When send results button is clicked, this uses a POST to send the transcript to the back end Flask restAPI.
-    const sendResultsToAI= async () => {
+    const sendResultsToAI = async () => {
+        setConversation(prev => [...prev, {key: prev.length, speaker: "User", text: fullTranscript}]);
         try {
             const response = await fetch('http://localhost:9000/api/llamaResponse', {
                 method: 'POST',
@@ -146,7 +147,7 @@ export default function Speak({isRecording, setIsRecording, transcript, setTrans
             });
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
-            setConversation([...conversation, fullTranscript, result.modelResponse]);
+            setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: result.modelResponse}]);
             setFullTranscript("");
         } catch (error) {
             console.error('Error uploading transcription:', error);

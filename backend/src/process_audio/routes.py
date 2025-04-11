@@ -10,7 +10,6 @@ model = model.to(torch.float32)
 
 @pa_blueprint.route('/api/transcribe', methods=['POST'])
 def transcribe():
-    print("here2")
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
 

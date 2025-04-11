@@ -1,4 +1,4 @@
-# Lang Converse AI
+# <ins>Lang Converse AI</ins>
 
 ![Lang Converse AI's logo](./frontend/public/LCAI-Panel.png)
 
@@ -7,19 +7,20 @@ An application that uses AI to practice your language speaking.
 ## Table of Contents
 
 * <ins>Use Guide</ins>
-  * Getting started
-  * How to use
-  * Contribution Guidelines
-  * License
-* <ins>Side Things I added for Myself</ins>
-  * Notes for use
-  * Notes for programs use
-  * Notes for further work
-  * Notes for git usage
+  * [Getting Started](#getting-started)
+  * [How To Start Up](#start-up)
+  * [How To Use The App](#use-app)
+  * [How to Close Down the App](#close-app)
+  * [Things To Be Aware Of](#aware-of)
+  * [Ideas for Further Work](#further-work)
+  * [Other Dependencies](#other-dependencies)
+  * [Contributors & Acknowledgements](#contrib-acknow)
+  * [Contribution Guidelines](#contrib-guidelines)
+  * [License](#license)
 
 # <ins>Use Guide</ins>
 
-## Getting started
+## <a name="#getting-started">Getting Started</a>
 Start by downloading the repo
 <!-- May have to add about the pyenv in the future for the version-->
 
@@ -53,7 +54,7 @@ Then after that you will have to run the following command in
 
 At this point you have all the necessary requirements to use this app on your device.
 
-## How to start up
+## <a name="#start-up">How To Start Up</a>
 
 To start off you will have to start the APIs for both the audio processing with OpenAI's Whisper and
 for the use of the LocalLlama model.
@@ -72,7 +73,7 @@ Note: you only have to run the chmod command once on the file, it's to allow it 
 use only use the script run command.
 
 Once this is ran, both of the API's will be up and you can move further on. (how to close them will be
-described later at _______)
+described later <a name ="#close-app">here</a>)
 
 Now move into the frontend directory.
 
@@ -85,7 +86,7 @@ For the front end, I chose to use vite, so you will use the following command to
 Now everything is set up and you can use the app by following the link provided
 (Make sure to use Google Chrome, one of the libraries only works with it)
 
-## How To Use The App
+## <a name="#use-app">How To Use The App</a>
 
 First, I want you to look at the settings box, that allows the user to choose if they are in a noisy
 environment or not, this decides whether Whisper or Speech Recognition API will be used.
@@ -107,7 +108,7 @@ When you send your transcription, the AI will respond back. The chat messages wi
 section in the lower part of the app. This conversation lasts the duration the app is up and can be scrolled
 through with the provided buttons.
 
-## How to Close Down the App
+## <a name="#close-app">How to Close Down the App</a>
 
 To close down the app start by closing the tab in your browser.
 
@@ -135,7 +136,7 @@ use the following command
  $ deactivate 
 ```
 
-## Things To Be Aware Of
+## <a name="#aware-of">Things To Be Aware Of</a>
 
 There is (will be) documentation on the generalities of all program files, so please check
 those if you have any questions about the use of a file.
@@ -162,7 +163,7 @@ This warning is harmless, it just tells the user that it is using FP32 on the CP
 faster due to using a GPU. I could add a suppression for this warning by importing warnings and filter warning with 
 ignore and then the message.
 
-## Ideas for Further Work
+## <a name="#further-work">Ideas for Further Work</a>
 
 See if you can find a better way to quit the APIs being ran in the background (overwrite signal to send on something?)
 
@@ -185,18 +186,37 @@ Add the buttons to block off so they cant be used while recording is happening.
 
 Add more testing.
 
-## Other Dependencies
+## <a name="#other-dependencies">Other Dependencies</a>
+
+Go to the docker website and download it for your system.
+
+then run 
+```
+$ docker login
+```
+
+then run
+```
+ $ docker pull libretranslate/libretranslate
+```
+
+We need this due to using 
+https://github.com/LibreTranslate/LibreTranslate
 
 I'm sure there are dependencies used, but have not put down yet. I will go about checking it out another day and will
 update this section accordingly. If anyone has any suggestions, please message me so I can update it.
 <!-- I think I used penv, npm, and pip which people may have to download and set up so add later -->
 
-## Contribution Guidelines
+## <a name="#contrib-acknow">Contributors & Acknowledgements</a>
+
+This app was created by myself (BenWrightSWE).
+
+## <a name="#contrib-guidelines">Contribution Guidelines</a>
 
 Follow the license guideline and please message me regarding any changes you may have made. I'd love to hear about them
 and implement them in this version after checking them out.
 
-## License
+## <a name="#license">License</a>
 
 For this project I am using the AGPL-3.0 license. Please respect this.
 
@@ -207,6 +227,13 @@ If you want further information regarding the license go to the LICENSE file.
 
 To see git log with a good format: 
  $ git log --all --decorate --oneline --graph
+
+### Notes for Docker usage:
+
+docker ps -a : shows all containers
+docker run -d -p 8500:5000 libretranslate/libretranslate
+docker stop {id_of_container}
+docker rm {id of container}
 -->
 
 
