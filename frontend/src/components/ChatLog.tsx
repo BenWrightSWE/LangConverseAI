@@ -7,7 +7,6 @@ import { useState, useEffect} from "react";
 /*
  * Produces the chat log denoting the responses from the AI and the user.
  */
-
 export default function ChatLog({conversation, setConversation}) {
 
     return (

@@ -6,10 +6,14 @@
 
 # Backend
 /backend/models/llama-2-7b-chat.Q4_K_M.gguf
+/backend/models/tinyllama_chat_finetune_nongguf/
+/backend/mdoels/tinylla,a_chat_finetune.gguf
+/backend/src/local_llama/old_route.py
 /backend/.idea/
 /backend/.DS_Store
 /backend/temp_audio.wav
 /backend/__pycache__
+
 
 # Frontend
 

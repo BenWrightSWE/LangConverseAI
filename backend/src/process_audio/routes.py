@@ -5,9 +5,13 @@ import os
 
 pa_blueprint = Blueprint('main', __name__)
 
+# loading the model
 model = whisper.load_model("base")
 model = model.to(torch.float32)
 
+# The blueprint for the endpoint for a POST request
+# Takes in a .wav file
+# Returns the transcription result
 @pa_blueprint.route('/api/transcribe', methods=['POST'])
 def transcribe():
     if 'file' not in request.files:

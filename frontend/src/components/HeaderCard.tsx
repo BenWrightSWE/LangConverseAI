@@ -1,6 +1,10 @@
 import '../css/HeaderCard.css'
 import logo from '../../public/LCAI-Panel.png'
 
+/*
+ * The header card that includes the logo and app name
+ */
+
 export default function HeaderCard() {
     return (
         <div className={"HeaderCard_HeaderContainer"}>

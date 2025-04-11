@@ -5,7 +5,7 @@ import {useState, useEffect, useRef} from "react";
  * Houses the buttons that record the users speech and send it to the AI.
  */
 export default function Speak({ isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
-                                  setFullTranscript, conversation, setConversation, isNoisy }) {
+                                  setFullTranscript, conversation, setConversation, isNoisy, practiceLangRef }) {
 
     const isNoisyRef = useRef(isNoisy);
 
@@ -110,7 +110,9 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         audioTranscribe();
     }
 
-    // Sends results to a python backend for Whisper
+    /*
+        Sends results to a python backend for Whisper
+     */
     const audioTranscribe = async () => {
         const formData = new FormData();
         formData.append('file', blob, 'speech.wav');
@@ -131,9 +133,10 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         }
     };
 
-
-
-    // When send results button is clicked, this uses a POST to send the transcript to the back end Flask restAPI.
+    /*
+     * Sends the user speech to the Flask app to get the model's response to their speech.
+     * It also sets puts both of these values into the conversation for the Chat Log.
+     */
     const sendResultsToAI = async () => {
         setConversation(prev => [...prev, {key: prev.length, speaker: "User", text: fullTranscript}]);
         try {
@@ -148,11 +151,19 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
             setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: result.modelResponse}]);
+            speak(result.modelResponse);
             setFullTranscript("");
         } catch (error) {
             console.error('Error uploading transcription:', error);
         }
     }
+
+    // Provides text to speech using the Web Speech API
+    const speak = (text) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; // Change for different languages
+        speechSynthesis.speak(utterance);
+    };
 
     // Resets the transcipt if the user isn't satisfied with the transciption.
     const resetTranscription = () => {

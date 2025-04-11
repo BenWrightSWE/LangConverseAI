@@ -1,5 +1,10 @@
 import '../css/TranscriptLog.css'
 
+/*
+ * The compoent that shows the user the interim transcript and the final transcript,
+ * so that the user can see what they are saying realtime and what they will be sending
+ * to the AI before it is sent.
+ */
 export default function TranscriptLog({transcript, fullTranscript}) {
     return (
         <div className={"TranscriptLog_Container"}>
