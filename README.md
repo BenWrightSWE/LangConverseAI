@@ -50,7 +50,26 @@ necessary libraries
 ```
  $ python3 -m install -r requirements.txt
 ```
-Then after that you will have to run the following command in
+<!--
+Then after that its setting up LibreTranslate
+Go into the backend/src and run the following command:
+```
+ $ git clone https://github.com/LibreTranslate/LibreTranslate.git
+```
+After that go into LibreTranslate/libretranslate/app.py and add the following in the imports
+```
+ from flask_cors import CORS
+```
+and go under "app = Flask(__name__)" and add the following
+```
+  CORS(app)
+```
+then, so you can download the required things, run the following command in backend:
+```
+  $ src/LibreTranslate/run.sh
+```
+You can stop it after its set up with CTRL + C
+-->
 
 At this point you have all the necessary requirements to use this app on your device.
 
@@ -231,9 +250,10 @@ To see git log with a good format:
 ### Notes for Docker usage:
 
 docker ps -a : shows all containers
-docker run -d -p 8500:5000 libretranslate/libretranslate
+docker run -d -p 8750:5000 libretranslate/libretranslate
 docker stop {id_of_container}
 docker rm {id of container}
+
 -->
 
 

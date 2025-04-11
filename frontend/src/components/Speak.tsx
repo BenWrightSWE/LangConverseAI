@@ -139,6 +139,8 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
      */
     const sendResultsToAI = async () => {
         setConversation(prev => [...prev, {key: prev.length, speaker: "User", text: fullTranscript}]);
+        //let englishTranslation = translateText(fullTranscript, true);
+        let englishTranslation = fullTranscript;
         try {
             const response = await fetch('http://localhost:9000/api/llamaResponse', {
                 method: 'POST',
@@ -146,22 +148,52 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: fullTranscript })
+                body: JSON.stringify({ message: englishTranslation })
             });
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
-            setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: result.modelResponse}]);
-            speak(result.modelResponse);
+            //let practiceTranslation = translateText(result.modelResponse, false);
+            let practiceTranslation = result.modelResponse;
+            setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: practiceTranslation}]);
+            speak(practiceTranslation);
             setFullTranscript("");
         } catch (error) {
             console.error('Error uploading transcription:', error);
         }
     }
 
+    /*
+     * Translates the text passed from the practice language to english or the other way around
+     * depending on isInput. Utilizes LibreTranslate for the translation.
+     *
+     * preTranslation - the text wanting to be translated
+     * isInput - boolean value for if its input or output
+     */
+    async function translateText(preTranslation, isInput) {
+        let base = "en"
+        let translateTo = practiceLangRef.current.substring(0,2)
+        if (isInput) {
+            base = practiceLangRef.current.substring(0,2)
+            translateTo = "en"
+        }
+        const response = await fetch("http://localhost:8750/translate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                q: preTranslation, base, translateTo,
+                format: "text",
+            }),
+        });
+        return response;
+    }
+
     // Provides text to speech using the Web Speech API
+    // Text is the text being turned into speech
     const speak = (text) => {
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US'; // Change for different languages
+        utterance.lang = practiceLangRef.current; // Change for different languages
         speechSynthesis.speak(utterance);
     };
 

@@ -13,6 +13,7 @@
 /backend/.DS_Store
 /backend/temp_audio.wav
 /backend/__pycache__
+/backend/LibreTranslate/
 
 
 # Frontend

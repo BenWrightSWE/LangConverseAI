@@ -33,7 +33,7 @@ def transcribe():
     if file_size == 0:
         return jsonify({"error": "Uploaded file is empty"}), 400
 
-    result = model.transcribe(file_path, language="en") # es
+    result = model.transcribe(file_path, language="es") # es
     transription = result['text']
 
     return jsonify({"transcription": transription})
