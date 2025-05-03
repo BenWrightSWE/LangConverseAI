@@ -141,6 +141,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         setConversation(prev => [...prev, {key: prev.length, speaker: "User", text: fullTranscript}]);
         //let englishTranslation = translateText(fullTranscript, true);
         let englishTranslation = fullTranscript;
+        let previousConversation = makePreviousConversation();
         try {
             const response = await fetch('http://localhost:9000/api/llamaResponse', {
                 method: 'POST',
@@ -148,7 +149,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: englishTranslation })
+                body: JSON.stringify({ message: englishTranslation, convo: previousConversation })
             });
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
@@ -160,6 +161,23 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         } catch (error) {
             console.error('Error uploading transcription:', error);
         }
+    }
+
+    // Sets the conversation history up to 4 different previous messages;
+    function makePreviousConversation() {
+        let previousConversation = "";
+        let startOfPrev = 0;
+        console.log(conversation.length);
+        if(conversation.length > 4) startOfPrev = conversation.length - 4;
+        for(let i = startOfPrev; i < (conversation.length); i++) {
+            if (i % 2 == 0) {
+                previousConversation = previousConversation + "User: " + conversation[i].text + "\n";
+            } else {
+                previousConversation = previousConversation + "Assistant: " + conversation[i].text + "\n";
+            }
+        }
+        console.log(previousConversation);
+        return previousConversation;
     }
 
     /*
