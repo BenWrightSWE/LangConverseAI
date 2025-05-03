@@ -205,9 +205,6 @@ Add the buttons to block off so they cant be used while recording is happening.
 
 Add more testing.
 
-After a while of use the AI starts showing possible future User responses in its response. Need to make it so
-that it only gives the response of the AI.
-
 The conversational memory is very basic and barely works, maybe find a better way than just putting it in the instructions.
 Perhaps it's how it's put into the instructions.
 

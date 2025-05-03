@@ -5,7 +5,8 @@ import {useState, useEffect, useRef} from "react";
  * Houses the buttons that record the users speech and send it to the AI.
  */
 export default function Speak({ isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
-                                  setFullTranscript, conversation, setConversation, isNoisy, practiceLangRef }) {
+                                  setFullTranscript, conversation, setConversation, isNoisy, practiceLangRef,
+                                  isSpeakBack }) {
 
     const isNoisyRef = useRef(isNoisy);
 
@@ -156,7 +157,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
             //let practiceTranslation = translateText(result.modelResponse, false);
             let practiceTranslation = result.modelResponse;
             setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: practiceTranslation}]);
-            speak(practiceTranslation);
+            if(isSpeakBack) speak(practiceTranslation);
             setFullTranscript("");
         } catch (error) {
             console.error('Error uploading transcription:', error);
@@ -167,7 +168,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
     function makePreviousConversation() {
         let previousConversation = "";
         let startOfPrev = 0;
-        console.log(conversation.length);
+        // console.log(conversation.length);
         if(conversation.length > 4) startOfPrev = conversation.length - 4;
         for(let i = startOfPrev; i < (conversation.length); i++) {
             if (i % 2 == 0) {
@@ -176,7 +177,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
                 previousConversation = previousConversation + "Assistant: " + conversation[i].text + "\n";
             }
         }
-        console.log(previousConversation);
+        // console.log(previousConversation);
         return previousConversation;
     }
 

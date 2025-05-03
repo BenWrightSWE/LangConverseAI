@@ -7,7 +7,7 @@ import { useRef } from "react";
  * and what language they are practicing.
  */
 
-export default function Settings({ isNoisy, setIsNoisy, practiceLangRef }) {
+export default function Settings({ isNoisy, setIsNoisy, practiceLangRef, isSpeakBack, setIsSpeakBack }) {
 
     // Sets the reference for the practice language so that the correct language can be used in translation.
     const setPracLang = () => {
@@ -21,6 +21,13 @@ export default function Settings({ isNoisy, setIsNoisy, practiceLangRef }) {
                 type="checkbox"
                 checked={isNoisy}
                 onChange={() => setIsNoisy(!isNoisy)}
+                className={"Settings_Toggle"}
+            />
+            <label className={"Settings_Label"}>AI Speaks Back</label>
+            <input
+                type="checkbox"
+                checked={isSpeakBack}
+                onChange={() => setIsSpeakBack(!isSpeakBack)}
                 className={"Settings_Toggle"}
             />
             <label className={"Settings_Label"}>Practice Language</label>

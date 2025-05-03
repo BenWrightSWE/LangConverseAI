@@ -23,6 +23,7 @@ function App() {
     const [fullTranscript, setFullTranscript] = useState('');
     const [conversation, setConversation] = useState<Message[]>([]);
     const [isNoisy, setIsNoisy] = useState(true);
+    const [isSpeakBack, setIsSpeakBack] = useState(true);
     const practiceLangRef = useRef("en-US");
 
     return (
@@ -32,8 +33,10 @@ function App() {
                 <Speak isRecording={isRecording} setIsRecording={setIsRecording}
                     transcript={transcript} setTranscript={setTranscript} fullTranscript={fullTranscript}
                        setFullTranscript={setFullTranscript} conversation={conversation}
-                       setConversation={setConversation} isNoisy={isNoisy} practiceLangRef={practiceLangRef}/>
-                <Settings isNoisy={isNoisy} setIsNoisy={setIsNoisy} practiceLangRef={practiceLangRef}/>
+                       setConversation={setConversation} isNoisy={isNoisy} practiceLangRef={practiceLangRef}
+                       isSpeakBack={isSpeakBack}/>
+                <Settings isNoisy={isNoisy} setIsNoisy={setIsNoisy} practiceLangRef={practiceLangRef}
+                          isSpeakBack={isSpeakBack} setIsSpeakBack={setIsSpeakBack}/>
             </div>
             <div className={"App_LowerPart"}>
                 <TranscriptLog transcript={transcript} fullTranscript={fullTranscript}/>
