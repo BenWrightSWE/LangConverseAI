@@ -2,12 +2,13 @@
 import '../css/ChatLog.css'
 import ChatBubble from "./ChatBubble.tsx";
 import Message from "../App.tsx";
+import TextChat from "./TextChat";
 import { useState, useEffect} from "react";
 
 /*
  * Produces the chat log denoting the responses from the AI and the user.
  */
-export default function ChatLog({conversation, setConversation}) {
+export default function ChatLog({ conversation, setConversation, setIsSendToAI, setFullTranscript }) {
 
     return (
         <section className={"ChatLog_Container"}>
@@ -30,6 +31,7 @@ export default function ChatLog({conversation, setConversation}) {
                     Will speak back when the AI's is originally logged
                 */}
             </div>
+            <TextChat setIsSendToAI={setIsSendToAI} setFullTranscript={setFullTranscript}/>
         </section>
     );
 }

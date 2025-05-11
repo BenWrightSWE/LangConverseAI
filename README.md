@@ -208,7 +208,7 @@ Add more testing.
 The conversational memory is very basic and barely works, maybe find a better way than just putting it in the instructions.
 Perhaps it's how it's put into the instructions.
 
-
+!!! Sometimes it displays a full "future" conversation based on the prompt given, need to fix this.
 
 ## <a name="#other-dependencies">Other Dependencies</a>
 

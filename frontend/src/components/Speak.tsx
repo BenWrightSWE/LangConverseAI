@@ -6,7 +6,7 @@ import {useState, useEffect, useRef} from "react";
  */
 export default function Speak({ isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
                                   setFullTranscript, conversation, setConversation, isNoisy, practiceLangRef,
-                                  isSpeakBack }) {
+                                  isSpeakBack, isSendToAI, setIsSendToAI }) {
 
     const isNoisyRef = useRef(isNoisy);
 
@@ -253,6 +253,13 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         // perhaps set a resetTranscript if they click this and set the record button to REC
     }, [isNoisy]);
 
+    useEffect(() => {
+        if (isSendToAI) {
+            sendResultsToAI();
+            setIsSendToAI(false);
+        }
+    }, [isSendToAI]);
+
     // Record changes to stop recording to send. Reset stays the same.
     return (
         <div className={"Speak_Container"}>
@@ -263,7 +270,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
                 {isRecording ? '\u25A0' : 'REC'}
             </button>
             <div className={"Speak_OtherButtons_Container"}>
-                <button className={"Speak_OtherButtons"} onClick={sendResultsToAI}>Send</button>
+                <button className={"Speak_OtherButtons"} onClick={() => setIsSendToAI(true)}>Send</button>
                 <button className={"Speak_OtherButtons"} onClick={resetTranscription}>Reset</button>
             </div>
         </div>

@@ -1,0 +1,35 @@
+
+.TextChat-Form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: center;
+    border-top: antiquewhite 2px solid;
+    height: 5em;
+    width: 100%;
+    padding-top: 2em;
+}
+
+.TextChat-UserInput {
+    max-width: 80%;
+    min-width: 80%;
+    max-height: 3em;
+    min-height: 3em;
+    padding: .5em;
+    background-color: #242424;
+    border: #ababab 2px solid;
+    border-radius: 10px;
+    color: #eee4f2;
+}
+
+.TextChat-Submit {
+    width: 4em;
+    height: 4em;
+    border: #ababab 2px solid;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.TextChat-SubmitText {
+    font-size: 2em;
+}

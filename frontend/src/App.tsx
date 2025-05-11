@@ -1,10 +1,10 @@
-import './App.css'
+import './App.css';
 import HeaderCard from "./components/HeaderCard.tsx";
 import Speak from "./components/Speak.tsx";
 import Settings from "./components/Settings.tsx";
 import TranscriptLog from "./components/TranscriptLog.tsx";
 import ChatLog from "./components/ChatLog";
-import { useState, useRef } from 'react'
+import { useState, useRef } from 'react';
 
 // interface for the Messages from the user and the AI.
 export interface Message {
@@ -24,6 +24,7 @@ function App() {
     const [conversation, setConversation] = useState<Message[]>([]);
     const [isNoisy, setIsNoisy] = useState(true);
     const [isSpeakBack, setIsSpeakBack] = useState(true);
+    const [isSendToAI, setIsSendToAI] = useState(false);
     const practiceLangRef = useRef("en-US");
 
     return (
@@ -34,13 +35,14 @@ function App() {
                     transcript={transcript} setTranscript={setTranscript} fullTranscript={fullTranscript}
                        setFullTranscript={setFullTranscript} conversation={conversation}
                        setConversation={setConversation} isNoisy={isNoisy} practiceLangRef={practiceLangRef}
-                       isSpeakBack={isSpeakBack}/>
+                       isSpeakBack={isSpeakBack} isSendToAI={isSendToAI} setIsSendToAI={setIsSendToAI}/>
                 <Settings isNoisy={isNoisy} setIsNoisy={setIsNoisy} practiceLangRef={practiceLangRef}
                           isSpeakBack={isSpeakBack} setIsSpeakBack={setIsSpeakBack}/>
             </div>
             <div className={"App_LowerPart"}>
                 <TranscriptLog transcript={transcript} fullTranscript={fullTranscript}/>
-                <ChatLog conversation={conversation} setConversation={conversation}></ChatLog>
+                <ChatLog conversation={conversation} setConversation={conversation} setIsSendToAI={setIsSendToAI}
+                         setFullTranscript={setFullTranscript}/>
             </div>
         </div>
     )
