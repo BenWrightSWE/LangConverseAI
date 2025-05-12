@@ -140,8 +140,9 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
      */
     const sendResultsToAI = async () => {
         setConversation(prev => [...prev, {key: prev.length, speaker: "User", text: fullTranscript}]);
-        //let englishTranslation = translateText(fullTranscript, true);
-        let englishTranslation = fullTranscript;
+        let englishTranslation = await translateText(fullTranscript, true);
+        //let englishTranslation = fullTranscript;
+        console.log(englishTranslation);
         let previousConversation = makePreviousConversation();
         try {
             const response = await fetch('http://localhost:9000/api/llamaResponse', {
@@ -154,8 +155,8 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
             });
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
-            //let practiceTranslation = translateText(result.modelResponse, false);
-            let practiceTranslation = result.modelResponse;
+            let practiceTranslation = translateText(result.modelResponse, false);
+            //let practiceTranslation = result.modelResponse;
             setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: practiceTranslation}]);
             if(isSpeakBack) speak(practiceTranslation);
             setFullTranscript("");
@@ -195,17 +196,23 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
             base = practiceLangRef.current.substring(0,2)
             translateTo = "en"
         }
+        //console.log(base)
+        //console.log(translateTo);
         const response = await fetch("http://localhost:8750/translate", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json"
+                //"Content-Type": "application/x-www-form-urlencoded",
             },
-            body: new URLSearchParams({
-                q: preTranslation, base, translateTo,
+            body: JSON.stringify({
+                q: preTranslation,
+                source: base,
+                target: translateTo,
                 format: "text",
             }),
         });
-        return response;
+        let data = await response.json();
+        return data.translatedText;
     }
 
     // Provides text to speech using the Web Speech API

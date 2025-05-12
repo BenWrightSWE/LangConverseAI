@@ -50,26 +50,6 @@ necessary libraries
 ```
  $ python3 -m install -r requirements.txt
 ```
-<!--
-Then after that its setting up LibreTranslate
-Go into the backend/src and run the following command:
-```
- $ git clone https://github.com/LibreTranslate/LibreTranslate.git
-```
-After that go into LibreTranslate/libretranslate/app.py and add the following in the imports
-```
- from flask_cors import CORS
-```
-and go under "app = Flask(__name__)" and add the following
-```
-  CORS(app)
-```
-then, so you can download the required things, run the following command in backend:
-```
-  $ src/LibreTranslate/run.sh
-```
-You can stop it after its set up with CTRL + C
--->
 
 At this point you have all the necessary requirements to use this app on your device.
 
@@ -93,6 +73,16 @@ use only use the script run command.
 
 Once this is ran, both of the API's will be up and you can move further on. (how to close them will be
 described later <a name ="#close-app">here</a>)
+
+To get the translation to work you have to set up LibreTranslate with docker, the library is already installed with the
+requirements.txt.
+
+First open docker on your computer and run the following command
+
+```
+ $ docker run -d -p 8750:5000 -e LT_CORS_ALLOW_ORIGINS="*" libretranslate/libretranslate
+```
+This runs libretranslate through docker with cors enabled
 
 Now move into the frontend directory.
 
@@ -148,6 +138,23 @@ commands:
 ```
 
 Once you are done with this, both of the APIs are now closed.
+
+To stop LibreTranslate through docker, run the following commands:
+
+To find the container_id of libretranslate use:
+```
+ $ docker ps 
+```
+
+Once you have the container ID use:
+```
+ $ docker stop {container_id}
+```
+
+If you'd like to remove the container use:
+```
+ $ docker rm {container_id}
+```
 
 Finally, in any terminals that you happen to have (.venv) in front of due to the activation of the venv within them,
 use the following command
