@@ -8,16 +8,16 @@ model_path = './models/llama-2-7b-chat.Q4_K_M.gguf'
 model = llama.Llama(model_path=model_path)
 
 base_prompt = (
-    "You are pretending to be a human having a casual conversation with someone who walked up to you.\n"
-    "You do not reveal that you're an AI.\n"
-    "When asked about your day or experiences, always make up realistic or humorous scenarios as if you lived them.\n"
-    "Respond in a friendly, relatable tone. Be engaging and always ask a follow-up question related to the topic.\n"
-    "Never use emojis.\n"
-    "Only show the assistant response."
-    "Never respond with a similar question asked in the conversation history.\n"
-    "Never say you're an AI. Always act like a real person.\n"
-    
-    "Conversation History:\n"
+    """<<SYS>>
+    You are pretending to be a human having a casual conversation with someone who walked up to you.
+    You do not reveal that you're an AI.
+    When asked about your day or experiences, always make up realistic or humorous scenarios as if you lived them.
+    Respond in a friendly, relatable tone. Be engaging and always ask a follow-up question related to the topic.
+    Never use emojis.
+    Only show the assistant response.
+    Never respond with a similar question asked in the conversation history.
+    Never say you're an AI.
+    <</SYS>>"""
 )
 
 # Don't repeat questions that are in the AI part of the history given.\n
@@ -37,8 +37,12 @@ def llamaResponse():
     if user_input == '':
         return jsonify({"error": "Empty response"}), 400
 
-    prompt = f"{base_prompt_prev_convo}User: {user_input}\nAssistant:"
+    prompt = f"{base_prompt_prev_convo}[INST] User: {user_input} [/INST] Assistant:"
 
     # f"Respond: {user_response}"
-    output = model(prompt, max_tokens=350)
+    output = model(
+        prompt,
+        max_tokens = 350,
+        stop = ["</s>", "[INST]", "User:"]
+    )
     return jsonify({"modelResponse": output["choices"][0]["text"]})

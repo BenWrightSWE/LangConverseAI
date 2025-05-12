@@ -173,7 +173,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         if(conversation.length > 4) startOfPrev = conversation.length - 4;
         for(let i = startOfPrev; i < (conversation.length); i++) {
             if (i % 2 == 0) {
-                previousConversation = previousConversation + "User: " + conversation[i].text + "\n";
+                previousConversation = previousConversation + "[INST] User: " + conversation[i].text + "[/INST]";
             } else {
                 previousConversation = previousConversation + "Assistant: " + conversation[i].text + "\n";
             }
