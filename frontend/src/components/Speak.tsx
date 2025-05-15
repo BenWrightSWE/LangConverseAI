@@ -6,11 +6,9 @@ import {useState, useEffect, useRef} from "react";
  */
 export default function Speak({ isRecording, setIsRecording, transcript, setTranscript, fullTranscript,
                                   setFullTranscript, conversation, setConversation, isNoisy, practiceLangRef,
-                                  isSpeakBack, isSendToAI, setIsSendToAI }) {
+                                  isSpeakBack, isSendToAI, setIsSendToAI, speechRecognitionRef }) {
 
     const isNoisyRef = useRef(isNoisy);
-
-    const speechRecognitionRef = useRef(null);
 
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     let audioChunksRef = useRef<Blob[]>([]);
@@ -115,16 +113,17 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
         Sends results to a python backend for Whisper
      */
     const audioTranscribe = async () => {
-        const formData = new FormData();
-        formData.append('file', blob, 'speech.wav');
+        const audioFormData = new FormData();
+        audioFormData.append('file', blob, 'speech.wav');
+        audioFormData.append('lang', practiceLangRef.current.substring(0,2))
 
         try {
             const response = await fetch('http://localhost:8500/api/transcribe', {
                 method: 'POST',
-                body: formData,
                 headers: {
                     'Accept': 'application/json'
-                }
+                },
+                body: audioFormData
             });
             const result = await response.json();
             console.log('Transcription', result.transcription);
@@ -155,7 +154,7 @@ export default function Speak({ isRecording, setIsRecording, transcript, setTran
             });
             const result = await response.json();
             console.log('Model Response:', result.modelResponse);
-            let practiceTranslation = translateText(result.modelResponse, false);
+            let practiceTranslation = await translateText(result.modelResponse, false);
             //let practiceTranslation = result.modelResponse;
             setConversation(prev => [...prev, {key: prev.length + 1, speaker: "AI", text: practiceTranslation}]);
             if(isSpeakBack) speak(practiceTranslation);

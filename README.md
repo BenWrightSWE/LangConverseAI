@@ -191,13 +191,14 @@ ignore and then the message.
 
 ## <a name="#further-work">Ideas for Further Work</a>
 
+Add the buttons to block off so they cant be used while recording is happening or while things are being processed
+
+Add more languages (easy just have to cross-reference the names between the different translators and recognitions).
+I personally only needed Spanish at the moment, so that's what is available at the time.
+
 See if you can find a better way to quit the APIs being ran in the background (overwrite signal to send on something?)
 
 Make it so the input gets put through AI for the none Whisper to add grammar to it.
-
-Until a good dataset for each conversational language can be used, the AI might be able to work better if you translate to english
-with Whisper, then get conversation from AI in english, then
-translate back to language chosen.
 
 Could also add future part where it shows both the english and other languages
 transcription and conversation. So like have a dropdown for native language, then
@@ -208,14 +209,7 @@ Add a wait before the quiet recording, the audio blob needs time before recordin
 
 Implementing a light and dark mode and a more comprehensive UI that works in more displays.
 
-Add the buttons to block off so they cant be used while recording is happening.
-
 Add more testing.
-
-The conversational memory is very basic and barely works, maybe find a better way than just putting it in the instructions.
-Perhaps it's how it's put into the instructions.
-
-!!! Sometimes it displays a full "future" conversation based on the prompt given, need to fix this.
 
 ## <a name="#other-dependencies">Other Dependencies</a>
 
@@ -266,6 +260,9 @@ docker run -d -p 8750:5000 libretranslate/libretranslate
 docker stop {id_of_container}
 docker rm {id of container}
 
+### Notes for further adding to the languages
+
+LibreTranslate: Arabic (ar), Chinese (zh-Hans), Japanese (ja), French (fr), and German (de)
 -->
 
 

@@ -7,11 +7,15 @@ import { useRef } from "react";
  * and what language they are practicing.
  */
 
-export default function Settings({ isNoisy, setIsNoisy, practiceLangRef, isSpeakBack, setIsSpeakBack }) {
+export default function Settings({ isNoisy, setIsNoisy, practiceLangRef, isSpeakBack, setIsSpeakBack,
+                                     speechRecognitionRef}) {
 
     // Sets the reference for the practice language so that the correct language can be used in translation.
     const setPracLang = () => {
         practiceLangRef.current = document.getElementById("Settings_PracticeLanguage").value;
+        if(speechRecognitionRef) {
+            speechRecognitionRef.current.lang = practiceLangRef.current;
+        }
     }
 
     return (

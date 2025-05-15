@@ -14,8 +14,12 @@ model = model.to(torch.float32)
 # Returns the transcription result
 @pa_blueprint.route('/api/transcribe', methods=['POST'])
 def transcribe():
+
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
+
+    if 'lang' not in request.form:
+        return jsonify({"error": "No lang part"}), 400
 
     file = request.files['file']
     print(f"recieved file: {file.filename}")
@@ -33,7 +37,7 @@ def transcribe():
     if file_size == 0:
         return jsonify({"error": "Uploaded file is empty"}), 400
 
-    result = model.transcribe(file_path, language="en") # es
+    result = model.transcribe(file_path, language=request.form['lang']) # es
     transription = result['text']
 
     return jsonify({"transcription": transription})

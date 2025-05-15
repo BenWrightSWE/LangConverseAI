@@ -25,6 +25,7 @@ function App() {
     const [isNoisy, setIsNoisy] = useState(true);
     const [isSpeakBack, setIsSpeakBack] = useState(true);
     const [isSendToAI, setIsSendToAI] = useState(false);
+    const speechRecognitionRef = useRef(null);
     const practiceLangRef = useRef("en-US");
 
     return (
@@ -35,9 +36,11 @@ function App() {
                     transcript={transcript} setTranscript={setTranscript} fullTranscript={fullTranscript}
                        setFullTranscript={setFullTranscript} conversation={conversation}
                        setConversation={setConversation} isNoisy={isNoisy} practiceLangRef={practiceLangRef}
-                       isSpeakBack={isSpeakBack} isSendToAI={isSendToAI} setIsSendToAI={setIsSendToAI}/>
+                       isSpeakBack={isSpeakBack} isSendToAI={isSendToAI} setIsSendToAI={setIsSendToAI}
+                       speechRecognitionRef={speechRecognitionRef}/>
                 <Settings isNoisy={isNoisy} setIsNoisy={setIsNoisy} practiceLangRef={practiceLangRef}
-                          isSpeakBack={isSpeakBack} setIsSpeakBack={setIsSpeakBack}/>
+                          isSpeakBack={isSpeakBack} setIsSpeakBack={setIsSpeakBack}
+                          speechRecognitionRef={speechRecognitionRef}/>
             </div>
             <div className={"App_LowerPart"}>
                 <TranscriptLog transcript={transcript} fullTranscript={fullTranscript}/>
