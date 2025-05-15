@@ -4,6 +4,12 @@
 
 An application that uses AI to practice your language speaking.
 
+<ins>**NOTICE**</ins>
+
+At the moment, this app is considered done. I may work on it more in the future if I decide to clean it up more,
+but its base functionality works as it should and I learned what I needed from it. Therefore, I expect myself not
+to make any consistent updates to this project.
+
 ## Table of Contents
 
 * <ins>Use Guide</ins>
@@ -80,9 +86,10 @@ requirements.txt.
 First open docker on your computer and run the following command
 
 ```
- $ docker run -d -p 8750:5000 -e LT_CORS_ALLOW_ORIGINS="*" libretranslate/libretranslate
+ $ docker run -d -p 8750:5000 -e LT_CORS_ALLOW_ORIGINS="*" -e LT_LOAD_ONLY="es,en" libretranslate/libretranslate
 ```
-This runs libretranslate through docker with cors enabled
+This runs libretranslate through docker with cors enabled. (if you are using something outside spanish or english
+because you added them to the program, you will need to add them under the LT_LOAD_ONLY as well)
 
 Now move into the frontend directory.
 
@@ -98,20 +105,21 @@ Now everything is set up and you can use the app by following the link provided
 ## <a name="#use-app">How To Use The App</a>
 
 First, I want you to look at the settings box, that allows the user to choose if they are in a noisy
-environment or not, this decides whether Whisper or Speech Recognition API will be used.
+environment or not, this decides whether Whisper or Speech Recognition API will be used. It also allows
+you to choose what language you want to use and whether you want it to speak back to you audibly or not.
 
 Second, you can choose the practice language and the native language. For now only the practice
-language is really used for the translating the input into english for the AI, but in the future
+language is used for the translating the input into english for the AI, but in the future
 the native language will allow the user to add in the option to have all the stuff to show in their native language
 as well.
 
 Then you have your actual recording/use buttons. To record click the REC button until you are done
 recording your voice and send it with the send button. If you want to reset your transcription, click the
-reset button.
+reset button. Alternatively, you can send a message with the text input option under the chat.
 
 While recording, currently, depending on the environment chosen, it will show the final transcription as you record it.
 However, it will always show you the concurrent transcription while recording. This is always accurate for the noisy
-environment, but is not accurate for what the transcription will look like for Whisper.
+environment, but is not accurate for what the transcription will look like for Whisper. 
 
 When you send your transcription, the AI will respond back. The chat messages will show up in the chat
 section in the lower part of the app. This conversation lasts the duration the app is up and can be scrolled
@@ -209,6 +217,8 @@ Add a wait before the quiet recording, the audio blob needs time before recordin
 
 Implementing a light and dark mode and a more comprehensive UI that works in more displays.
 
+Download and try using app on new device to clarify setup and run instructions.
+
 Add more testing.
 
 ## <a name="#other-dependencies">Other Dependencies</a>
@@ -227,6 +237,7 @@ then run
 
 We need this due to using 
 https://github.com/LibreTranslate/LibreTranslate
+https://hub.docker.com/r/libretranslate/libretranslate
 
 I'm sure there are dependencies used, but have not put down yet. I will go about checking it out another day and will
 update this section accordingly. If anyone has any suggestions, please message me so I can update it.
